@@ -8,7 +8,7 @@ Este é um projeto simples em Java criado para praticar os conceitos de **Orient
 
 O sistema permite realizar as seguintes ações:
 
-  * **Cadastrar** um novo livro (Título, Autor, ISBN, Quantidade).
+  * **Cadastrar** um novo livro (Título, Autor, Preço).
   * **Listar** todos os livros no estoque.
   * **Atualizar** informações ou quantidade de um livro.
   * **Remover** um livro do estoque.
