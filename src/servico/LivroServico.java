@@ -5,8 +5,11 @@ import excecoes.LivroInvalido;
 import gerenciador.GerenciarLivro;
 import modelo.Livro;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LivroServico {
-    private Long id = 1L;
+    private int id = 1;
 
     private String nomeLivro;
     private String nomeAutor;
@@ -73,24 +76,25 @@ public class LivroServico {
         */
     }
 
-    public void editarNomeLivro(int id, String nomeLivro) throws LivrariaExcecao {
-        for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
-            if (GerenciarLivro.getLivros().get(i).getId() == id) {
-                validarLivro(nomeLivro, GerenciarLivro.getLivros().get(i).getAutor());
+    public void editarNomeLivro(String novoNome) throws LivrariaExcecao {
+        Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
 
-                GerenciarLivro.getLivros().get(i).setNome(nomeLivro);
+        if (livro == null) {
+            throw new LivroInvalido("==Nenhum livro encontrado==");
+        }
+
+        for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
+            if (GerenciarLivro.getLivros().get(i).getId() == livro.getId()) {
+                GerenciarLivro.getLivros().get(i).setNome(novoNome);
             }
         }
     }
 
-    public void editarNomeAutor(int id, String nomeAutor) throws LivrariaExcecao {
+    public void editarNomeAutor(String nomeAutor) throws LivrariaExcecao {
+        Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
+
         for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
-
-            if (GerenciarLivro.getLivros().get(i).getNome().equals(nomeAutor)) {
-                throw new LivroInvalido("Digite um novo nome para alterar");
-            }
-
-            if (GerenciarLivro.getLivros().get(i).getId() == id) {
+            if (GerenciarLivro.getLivros().get(i).getId() == livro.getId()) {
                 validarLivro(GerenciarLivro.getLivros().get(i).getNome(), nomeAutor);
 
                 GerenciarLivro.getLivros().get(i).setAutor(nomeAutor);
@@ -98,13 +102,15 @@ public class LivroServico {
         }
     }
 
-    public void editarPrecoLivro(int id, double preco) throws LivrariaExcecao {
+    public void editarPrecoLivro(double preco) throws LivrariaExcecao {
+        Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
+
         if (preco <= 0) {
             throw new LivroInvalido("O novo preço do livro não pode ser menor ou igual a zero");
         }
 
         for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
-            if (GerenciarLivro.getLivros().get(i).getId() == id) {
+            if (GerenciarLivro.getLivros().get(i).getId() == livro.getId()) {
                 GerenciarLivro.getLivros().get(i).setPreco(preco);
             }
         }
@@ -113,8 +119,48 @@ public class LivroServico {
     private void validarLivro(String nomeLivro, String nomeAutor) throws LivrariaExcecao {
         for (Livro livro : GerenciarLivro.getLivros()) {
             if (livro.getNome().equals(nomeLivro) && livro.getAutor().equals(nomeAutor)) {
-                throw new LivroInvalido("Esse livro com o autor digitado já está cadastrado");
+                throw new LivroInvalido("Esse livro com o autor, já está cadastrado");
             }
         }
+    }
+
+    public void verificarLivros() throws LivrariaExcecao {
+        if (GerenciarLivro.getLivros().isEmpty()) {
+            throw new LivroInvalido("==Nenhum livro cadastrado no atual momento==");
+        }
+    }
+
+    public List<String> procurarNomeLivro(String nomeLivro) throws LivrariaExcecao {
+        List<String> lista = new ArrayList<>();
+
+        for (Livro livro : GerenciarLivro.getLivros()) {
+            if (livro.getNome().equals(nomeLivro)) {
+                lista.add(livro.toString());
+            }
+        }
+
+        if (lista.isEmpty()) {
+            throw new LivroInvalido("==Nenhum livro encontrado==");
+        }
+
+        return lista;
+    }
+
+    public Livro procurarNomeLivroAutor(String nomeLivro, String nomeAutor) throws LivrariaExcecao {
+        for (Livro livro : GerenciarLivro.getLivros()) {
+            if (livro.getNome().equals(nomeLivro) && livro.getAutor().equals(nomeAutor)) {
+                return livro;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Livro> mostrarTodosLivros() throws LivrariaExcecao {
+        if (GerenciarLivro.getLivros().isEmpty()) {
+            throw new LivroInvalido("==Nenhum livro cadastrado==");
+        }
+
+        return GerenciarLivro.getLivros();
     }
 }
