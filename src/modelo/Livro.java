@@ -1,7 +1,7 @@
 package modelo;
 
 public class Livro {
-    private long id;
+    private int id;
     private String nome;
     private String autor;
     private double preco;
@@ -9,18 +9,18 @@ public class Livro {
     public Livro() {
     }
 
-    public Livro(long id, String nome, String autor, double preco) {
+    public Livro(int id, String nome, String autor, double preco) {
         this.id = id;
         this.nome = nome;
         this.autor = autor;
         this.preco = preco;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,10 +51,9 @@ public class Livro {
     @Override
     public String toString() {
         return "Livro{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", autor='" + autor + '\'' +
-                ", preco=" + preco +
+                "Nome = '" + nome + '\'' +
+                ", Autor = '" + autor + '\'' +
+                ", Preco = " + preco +
                 '}';
     }
 }
