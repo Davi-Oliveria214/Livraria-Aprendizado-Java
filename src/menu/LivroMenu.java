@@ -1,8 +1,7 @@
 package menu;
 
 import excecoes.LivrariaExcecao;
-import gerenciador.GerenciarLivro;
-import modelo.Livro;
+import excecoes.LivroInvalido;
 import servico.LivroServico;
 
 import java.util.Scanner;
@@ -18,7 +17,7 @@ public class LivroMenu {
     public void entrada() {
         int opcao;
         do {
-            System.out.println("Escolha uma das opções\n 1 - Adicionar um novo livro\n 2 - Ver todos os livros\n 3 - Excluir livro\n 4 - Editar Livro\n 0 - sair");
+            System.out.println("Escolha uma das opções\n 1 - Adicionar um novo livro\n 2 - Ver todos os livros\n 3 - Excluir livro\n 4 - Editar Livro\n 5 - Procurar por nome\n 0 - sair");
             opcao = sc.nextInt();
 
             switch (opcao) {
@@ -34,6 +33,9 @@ public class LivroMenu {
                     break;
                 case 4:
                     editarLivro();
+                    break;
+                case 5:
+                    procurarLivro();
                     break;
                 case 0:
                     System.out.println("Fechando programa");
@@ -75,14 +77,12 @@ public class LivroMenu {
     }
 
     private void livrosCadastrados() {
-        if (!GerenciarLivro.getLivros().isEmpty()) {
+        try {
             System.out.println("\n|--Todos os livros cadastrados--|\n");
-            for (Livro livro : GerenciarLivro.getLivros()) {
-                System.out.println(livro.toString());
-            }
-            System.out.println("\n==Quantidade de livros cadastrados: " + GerenciarLivro.getLivros().size() + "==\n");
-        } else {
-            System.out.println("\n==Nenhum livro cadastrado==\n");
+
+            System.out.println(livroServico.mostrarTodosLivros().toString());
+        } catch (LivrariaExcecao e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -90,6 +90,8 @@ public class LivroMenu {
         int opcao = 0;
         do {
             try {
+                livroServico.verificarLivros();
+
                 System.out.println("\nDigite o id do livro que deseja excluir");
                 livroServico.excluirLivro(sc.nextInt());
                 System.out.println("\n==Livro excluído com sucesso==\n");
@@ -104,29 +106,62 @@ public class LivroMenu {
     }
 
     private void editarLivro() {
-        System.out.println("Digite o id do livro que deseja editar");
-        int id = sc.nextInt();
+        int opcao = 0;
+        do {
+            try {
+                livroServico.verificarLivros();
 
-        System.out.println("Escolha uma das opções de edição\n 1 - Alterar nome do Autor\n 2 - Alterar nome do Livro\n 3 - Alterar Preço");
-        int opcao = sc.nextInt();
-        sc.nextLine();
-
-        switch (opcao) {
-            case 1:
-                System.out.println("Digite o novo nome do Autor");
-                livroServico.editarNomeAutor(id, sc.nextLine());
-                break;
-            case 2:
-                System.out.println("Digite o novo nome do Livro");
-                livroServico.editarNomeLivro(id, sc.nextLine());
-                break;
-            case 3:
-                System.out.println("Digite o novo preço do livro");
-                livroServico.editarPrecoLivro(id, sc.nextDouble());
                 sc.nextLine();
-                break;
-            default:
-                System.out.println("Opção inválida");
+                System.out.println("Digite o nome do livro que deseja editar");
+                String nomeLivro = sc.nextLine();
+
+                System.out.println("Digite o nome do Autor do livro que deseja editar");
+                String nomeAutor = sc.nextLine();
+
+                livroServico.procurarNomeLivroAutor(nomeLivro, nomeAutor);
+
+                System.out.println("Escolha uma das opções de edição\n 1 - Alterar nome do Autor\n 2 - Alterar nome do Livro\n 3 - Alterar Preço");
+                opcao = sc.nextInt();
+                sc.nextLine();
+
+                switch (opcao) {
+                    case 1:
+                        System.out.println("Digite o novo nome do Autor");
+                        livroServico.editarNomeAutor(sc.nextLine());
+                        break;
+                    case 2:
+                        System.out.println("Digite o novo nome do Livro");
+                        livroServico.editarNomeLivro(sc.nextLine());
+                        break;
+                    case 3:
+                        System.out.println("Digite o novo preço do livro");
+                        livroServico.editarPrecoLivro(sc.nextDouble());
+                        sc.nextLine();
+                        break;
+                    default:
+                        System.out.println("Opção inválida");
+                }
+
+                System.out.println("Deseja cadastrar outro livro ?\n 1-Sim\n 2-Não");
+                opcao = sc.nextInt();
+                sc.nextLine();
+            } catch (LivroInvalido e) {
+                System.out.println(e.getMessage());
+            }
+        } while (opcao == 1);
+    }
+
+    private void procurarLivro() {
+        try {
+            livroServico.verificarLivros();
+
+            sc.nextLine();
+            System.out.println("Digite o nome do livro que deseja achar");
+            String livro = sc.nextLine();
+
+            System.out.println(livroServico.procurarNomeLivro(livro));
+        } catch (LivrariaExcecao e) {
+            System.out.println(e.getMessage());
         }
     }
 }
