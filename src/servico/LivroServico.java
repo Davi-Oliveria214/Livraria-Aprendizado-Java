@@ -76,7 +76,7 @@ public class LivroServico {
         */
     }
 
-    public void editarNomeLivro(String novoNome) throws LivrariaExcecao {
+    public void editarNomeLivro(String nomeLivro, String nomeAutor, String novoNomeLivro) throws LivrariaExcecao {
         Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
 
         if (livro == null) {
@@ -85,24 +85,24 @@ public class LivroServico {
 
         for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
             if (GerenciarLivro.getLivros().get(i).getId() == livro.getId()) {
-                GerenciarLivro.getLivros().get(i).setNome(novoNome);
+                GerenciarLivro.getLivros().get(i).setNome(novoNomeLivro);
             }
         }
     }
 
-    public void editarNomeAutor(String nomeAutor) throws LivrariaExcecao {
+    public void editarNomeAutor(String nomeLivro, String nomeAutor, String novoNomeAutor) throws LivrariaExcecao {
         Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
 
         for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
             if (GerenciarLivro.getLivros().get(i).getId() == livro.getId()) {
-                validarLivro(GerenciarLivro.getLivros().get(i).getNome(), nomeAutor);
+                validarLivro(GerenciarLivro.getLivros().get(i).getNome(), novoNomeAutor);
 
-                GerenciarLivro.getLivros().get(i).setAutor(nomeAutor);
+                GerenciarLivro.getLivros().get(i).setAutor(novoNomeAutor);
             }
         }
     }
 
-    public void editarPrecoLivro(double preco) throws LivrariaExcecao {
+    public void editarPrecoLivro(String nomeLivro, String nomeAutor, double novoPreco) throws LivrariaExcecao {
         Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
 
         if (preco <= 0) {
@@ -111,7 +111,7 @@ public class LivroServico {
 
         for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
             if (GerenciarLivro.getLivros().get(i).getId() == livro.getId()) {
-                GerenciarLivro.getLivros().get(i).setPreco(preco);
+                GerenciarLivro.getLivros().get(i).setPreco(novoPreco);
             }
         }
     }
@@ -157,9 +157,7 @@ public class LivroServico {
     }
 
     public List<Livro> mostrarTodosLivros() throws LivrariaExcecao {
-        if (GerenciarLivro.getLivros().isEmpty()) {
-            throw new LivroInvalido("==Nenhum livro cadastrado==");
-        }
+        verificarLivros();
 
         return GerenciarLivro.getLivros();
     }

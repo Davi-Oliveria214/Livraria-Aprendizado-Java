@@ -78,7 +78,8 @@ public class LivroMenu {
 
     private void livrosCadastrados() {
         try {
-            System.out.println("\n|--Todos os livros cadastrados--|\n");
+
+            System.out.println("\n|--Todos os livros--|\n");
 
             System.out.println(livroServico.mostrarTodosLivros().toString());
         } catch (LivrariaExcecao e) {
@@ -118,8 +119,6 @@ public class LivroMenu {
                 System.out.println("Digite o nome do Autor do livro que deseja editar");
                 String nomeAutor = sc.nextLine();
 
-                livroServico.procurarNomeLivroAutor(nomeLivro, nomeAutor);
-
                 System.out.println("Escolha uma das opções de edição\n 1 - Alterar nome do Autor\n 2 - Alterar nome do Livro\n 3 - Alterar Preço");
                 opcao = sc.nextInt();
                 sc.nextLine();
@@ -127,15 +126,15 @@ public class LivroMenu {
                 switch (opcao) {
                     case 1:
                         System.out.println("Digite o novo nome do Autor");
-                        livroServico.editarNomeAutor(sc.nextLine());
+                        livroServico.editarNomeAutor(nomeLivro, nomeAutor, sc.nextLine());
                         break;
                     case 2:
                         System.out.println("Digite o novo nome do Livro");
-                        livroServico.editarNomeLivro(sc.nextLine());
+                        livroServico.editarNomeLivro(nomeLivro, nomeAutor, sc.nextLine());
                         break;
                     case 3:
                         System.out.println("Digite o novo preço do livro");
-                        livroServico.editarPrecoLivro(sc.nextDouble());
+                        livroServico.editarPrecoLivro(nomeLivro, nomeAutor, sc.nextDouble());
                         sc.nextLine();
                         break;
                     default:
