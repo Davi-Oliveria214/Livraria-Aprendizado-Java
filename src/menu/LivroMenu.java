@@ -78,7 +78,8 @@ public class LivroMenu {
 
     private void livrosCadastrados() {
         try {
-
+            livroServico.verificarLivros();
+            
             System.out.println("\n|--Todos os livros--|\n");
 
             System.out.println(livroServico.mostrarTodosLivros().toString());

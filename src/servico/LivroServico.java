@@ -157,8 +157,6 @@ public class LivroServico {
     }
 
     public List<Livro> mostrarTodosLivros() throws LivrariaExcecao {
-        verificarLivros();
-
         return GerenciarLivro.getLivros();
     }
 }
