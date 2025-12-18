@@ -79,7 +79,6 @@ public class LivroMenu {
     private void livrosCadastrados() {
         try {
             livroServico.verificarLivros();
-            
             System.out.println("\n|--Todos os livros--|\n");
 
             System.out.println(livroServico.mostrarTodosLivros().toString());
@@ -94,11 +93,16 @@ public class LivroMenu {
             try {
                 livroServico.verificarLivros();
 
-                System.out.println("\nDigite o id do livro que deseja excluir");
-                livroServico.excluirLivro(sc.nextInt());
+                System.out.println("\nDigite o nome do livro que deseja excluir");
+                String nomeLivro = sc.nextLine();
+
+                System.out.println("\nDigite o nome do autor do livro que deseja excluir");
+                String nomeAutor = sc.nextLine();
+
+                livroServico.excluirLivro(nomeLivro, nomeAutor);
                 System.out.println("\n==Livro excluído com sucesso==\n");
 
-                System.out.println("Deseja cadastrar outro livro ?\n 1-Sim\n 2-Não");
+                System.out.println("Deseja excluir outro livro ?\n 1-Sim\n 2-Não");
                 opcao = sc.nextInt();
                 sc.nextLine();
             } catch (LivrariaExcecao e) {
@@ -142,7 +146,7 @@ public class LivroMenu {
                         System.out.println("Opção inválida");
                 }
 
-                System.out.println("Deseja cadastrar outro livro ?\n 1-Sim\n 2-Não");
+                System.out.println("Deseja alterar outro livro ?\n 1-Sim\n 2-Não");
                 opcao = sc.nextInt();
                 sc.nextLine();
             } catch (LivroInvalido e) {

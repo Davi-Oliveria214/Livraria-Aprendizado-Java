@@ -52,26 +52,22 @@ public class LivroServico {
         this.preco = preco;
     }
 
-    public void excluirLivro(int id) throws LivrariaExcecao {
-        boolean isLivro = false;
-        if (GerenciarLivro.getLivros().isEmpty()) {
+    public void excluirLivro(String nomeLivro, String nomeAutor) throws LivrariaExcecao {
+        Livro livro = procurarNomeLivroAutor(nomeLivro, nomeAutor);
+
+        if (livro == null) {
             throw new LivroInvalido("Não há livros para remover");
         }
 
         for (int i = 0; i < GerenciarLivro.getLivros().size(); i++) {
-            if (GerenciarLivro.getLivros().get(i).getId() == id) {
+            if (livro.getNome().equals(nomeLivro) && livro.getAutor().equals(nomeAutor)) {
                 GerenciarLivro.getLivros().remove(i);
-                isLivro = true;
                 break;
             }
         }
 
-        if (!isLivro) {
-            throw new LivroInvalido("Livro não encontrado");
-        }
-
         /*
-        removeIf() pode remover multiplos elementos que corresponde ao requisito da condição desejada
+        removeIf() pode remover multiplos elementos que correspondem ao requisito da condição desejada
         GerenciarLivro.getLivros().removeIf(livro -> livro.getId() == id);
         */
     }
